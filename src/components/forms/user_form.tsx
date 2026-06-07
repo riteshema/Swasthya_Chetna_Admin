@@ -13,21 +13,21 @@ import {
   AccordionTrigger,
 } from "@components/ui/accordion";
 import {
-  User, Mail, MapPin, Heart, Activity,
-  Stethoscope, Building, CreditCard, Shield,
+  User,
+  Mail,
+  MapPin,
+  Heart,
+  Activity,
+  Stethoscope,
+  Building,
+  CreditCard,
+  Shield,
 } from "lucide-react";
 
 const YES_NO_OPTIONS = [
   { name: "Yes", value: "yes" },
-  { name: "No",  value: "no"  },
+  { name: "No", value: "no" },
 ];
-
-const TIMELINE_LABELS: Record<string, string> = {
-  last_one_month:    "Last 1 Month",
-  last_three_month:  "Last 3 Months",
-  last_six_month:    "Last 6 Months",
-  last_twelve_month: "Last 12 Months",
-};
 
 export default function UserEditForm({
   rowAction,
@@ -42,91 +42,90 @@ export default function UserEditForm({
       const r = is_loaded ? rowAction.row : undefined;
 
       return {
-        // Personal Info
-        first_name:           r?.first_name           ?? "",
-        middle_name:          r?.middle_name           ?? "",
-        last_name:            r?.last_name             ?? "",
-        dob:                  r?.dob                   ?? null,
-        age:                  r?.age                   ?? null,
-        gender:               r?.gender                ?? "",
-        marital_status:       r?.marital_status        ?? "",
-        education:            r?.education             ?? "",
-        occupation:           r?.occupation            ?? "",
-        designation:          r?.designation           ?? "",
-        organization_email:   r?.organization_email    ?? "",
-        organization_contact: r?.organization_contact  ?? "",
-        voter_id:             r?.voter_id              ?? "",
-        aadhar_card:          r?.aadhar_card           ?? null,
+        first_name: r?.first_name ?? "",
+        middle_name: r?.middle_name ?? "",
+        last_name: r?.last_name ?? "",
+        dob: r?.dob ?? null,
+        age: r?.age ?? null,
+        gender: r?.gender ?? "",
+        marital_status: r?.marital_status ?? "",
+        education: r?.education ?? "",
+        occupation: r?.occupation ?? "",
+        designation: r?.designation ?? "",
+        organization_email: r?.organization_email ?? "",
+        organization_contact: r?.organization_contact ?? "",
+        voter_id: r?.voter_id ?? "",
+        aadhar_card: r?.aadhar_card ?? null,
 
-        // Address
-        country:      r?.country      ?? "",
-        state:        r?.state        ?? "",
-        district:     r?.district     ?? "",
-        area:         r?.area         ?? "",
-        pincode:      r?.pincode      ?? "",
-        landmark:     r?.landmark     ?? "",
-        society:      r?.society      ?? "",
+        country: r?.country ?? "",
+        state: r?.state ?? "",
+        district: r?.district ?? "",
+        area: r?.area ?? "",
+        pincode: r?.pincode ?? "",
+        landmark: r?.landmark ?? "",
+        society: r?.society ?? "",
         house_number: r?.house_number ?? "",
         street_number: r?.street_number ?? "",
 
-        // Role
-        role:           r?.role           ?? "user",
+        role: r?.role ?? "user",
         role_is_active: r?.role_is_active ?? false,
 
-        // Health Insurance
-        insurance_occupation:     r?.insurance_occupation     ?? "",
-        annual_income:            r?.annual_income            ?? null,
-        medical_insurance:        r?.medical_insurance        ?? "No",
+        insurance_occupation: r?.insurance_occupation ?? "",
+        annual_income: r?.annual_income ?? null,
+        medical_insurance: r?.medical_insurance ?? "No",
         health_insurance_company: r?.health_insurance_company ?? "",
-        sum_insure:               r?.sum_insure               ?? null,
-        policy_name:              r?.policy_name              ?? "",
-        premium_amount:           r?.premium_amount           ?? null,
+        sum_insure: r?.sum_insure ?? null,
+        policy_name: r?.policy_name ?? "",
+        premium_amount: r?.premium_amount ?? null,
 
-        // Personal Habits
         habit_exercise: r?.habit_exercise ?? "",
-        food:           r?.food           ?? "",
-        drinks:         r?.drinks         ?? "",
-        intoxications:  r?.intoxications  ?? "",
-        hobbies:        r?.hobbies        ?? "",
-        likings:        r?.likings        ?? "",
-        disliking:      r?.disliking      ?? "",
-        life_goal:      r?.life_goal      ?? "",
+        food: r?.food ?? "",
+        drinks: r?.drinks ?? "",
+        intoxications: r?.intoxications ?? "",
+        hobbies: r?.hobbies ?? "",
+        likings: r?.likings ?? "",
+        disliking: r?.disliking ?? "",
+        life_goal: r?.life_goal ?? "",
 
-        // Health Fitness
-        running:                        r?.running                        ?? "no",
-        walking:                        r?.walking                        ?? "no",
-        cycling:                        r?.cycling                        ?? "no",
-        fitness_exercise:               r?.fitness_exercise               ?? "no",
-        competitive_sports_events:      r?.competitive_sports_events      ?? "no",
-        paid_events:                    r?.paid_events                    ?? "no",
-        regular_health_management:      r?.regular_health_management      ?? "no",
-        donate_for_society_benefit:     r?.donate_for_society_benefit     ?? "no",
-        invest_funds_in_company_shares: r?.invest_funds_in_company_shares ?? "no",
-        donation_amount:                r?.donation_amount                ?? null,
+        running: r?.running ?? "no",
+        walking: r?.walking ?? "no",
+        cycling: r?.cycling ?? "no",
+        fitness_exercise: r?.fitness_exercise ?? "no",
+        competitive_sports_events: r?.competitive_sports_events ?? "no",
+        paid_events: r?.paid_events ?? "no",
+        regular_health_management: r?.regular_health_management ?? "no",
+        donate_for_society_benefit: r?.donate_for_society_benefit ?? "no",
+        invest_funds_in_company_shares:
+          r?.invest_funds_in_company_shares ?? "no",
+        donation_amount: r?.donation_amount ?? null,
 
-        // Medical Conditions
-        skin_disease:                   r?.skin_disease                   ?? "no",
-        diabetes:                       r?.diabetes                       ?? "no",
-        hypertension:                   r?.hypertension                   ?? "no",
-        thyroidism:                     r?.thyroidism                     ?? "no",
-        dyslipidemia:                   r?.dyslipidemia                   ?? "no",
-        cancer:                         r?.cancer                         ?? "no",
-        asthma:                         r?.asthma                         ?? "no",
-        tuberculosis:                   r?.tuberculosis                   ?? "no",
-        respiratory_infections:         r?.respiratory_infections         ?? "no",
-        stress_depression_anxiety:      r?.stress_depression_anxiety      ?? "no",
-        constipation_diarrhea:          r?.constipation_diarrhea          ?? "no",
-        indigestion_acidity_flatulence: r?.indigestion_acidity_flatulence ?? "no",
-        headache:                       r?.headache                       ?? "no",
-        heart_related_problems:         r?.heart_related_problems         ?? "no",
-        kidney_related_problems:        r?.kidney_related_problems        ?? "no",
-        liver_related_problems:         r?.liver_related_problems         ?? "no",
-
-        // Bank Details
-        bank_name:      r?.bank_name      ?? "",
+        skin_disease: r?.skin_disease ?? "no",
+        diabetes: r?.diabetes ?? "no",
+        hypertension: r?.hypertension ?? "no",
+        thyroidism: r?.thyroidism ?? "no",
+        dyslipidemia: r?.dyslipidemia ?? "no",
+        cancer: r?.cancer ?? "no",
+        asthma: r?.asthma ?? "no",
+        tuberculosis: r?.tuberculosis ?? "no",
+        respiratory_infections: r?.respiratory_infections ?? "no",
+        stress_depression_anxiety: r?.stress_depression_anxiety ?? "no",
+        constipation_diarrhea: r?.constipation_diarrhea ?? "no",
+        indigestion_acidity_flatulence:
+          r?.indigestion_acidity_flatulence ?? "no",
+        headache: r?.headache ?? "no",
+        heart_related_problems: r?.heart_related_problems ?? "no",
+        kidney_related_problems: r?.kidney_related_problems ?? "no",
+        liver_related_problems: r?.liver_related_problems ?? "no",
+        medical_timelines: {
+          last_one_month: r?.medical_timelines?.last_one_month ?? null,
+          last_three_month: r?.medical_timelines?.last_three_month ?? null,
+          last_six_month: r?.medical_timelines?.last_six_month ?? null,
+          last_twelve_month: r?.medical_timelines?.last_twelve_month ?? null,
+        },
+        bank_name: r?.bank_name ?? "",
         account_number: r?.account_number ?? "",
-        ifsc:           r?.ifsc           ?? "",
-        upi:            r?.upi            ?? "",
+        ifsc: r?.ifsc ?? "",
+        upi: r?.upi ?? "",
       };
     }, [rowAction]),
 
@@ -146,12 +145,11 @@ export default function UserEditForm({
     <GenericFormContainer
       form={form}
       rowAction={rowAction}
-      titles={{add:"Add User", update: "Edit User", read: "View User" }}
+      titles={{ add: "Add User", update: "Edit User", read: "View User" }}
       submitLabels={{ update: "Save Changes" }}
       {...props}
     >
       <Accordion multiple className="w-full space-y-2">
-
         <AccordionItem value="personal" className="rounded-lg border px-4">
           <AccordionTrigger className="gap-2 text-sm font-semibold">
             <User className="size-4 text-blue-500" /> Personal Information
@@ -203,7 +201,10 @@ export default function UserEditForm({
                 <f.FormSelectField
                   label="Gender"
                   defaultValue={f.state.value}
-                  options={["Male", "Female", "Other"].map((v) => ({ name: v, value: v }))}
+                  options={["Male", "Female", "Other"].map((v) => ({
+                    name: v,
+                    value: v,
+                  }))}
                   onChange={(v) => f.handleChange(v as never)}
                   error={f.state.meta.errors[0]}
                 />
@@ -214,7 +215,9 @@ export default function UserEditForm({
                 <f.FormSelectField
                   label="Marital Status"
                   defaultValue={f.state.value}
-                  options={["Single", "Married", "Divorced", "Widowed"].map((v) => ({ name: v, value: v }))}
+                  options={["Single", "Married", "Divorced", "Widowed"].map(
+                    (v) => ({ name: v, value: v }),
+                  )}
                   onChange={(v) => f.handleChange(v as never)}
                   error={f.state.meta.errors[0]}
                 />
@@ -294,17 +297,30 @@ export default function UserEditForm({
           </AccordionContent>
         </AccordionItem>
 
-        {/* Address */}
         <AccordionItem value="address" className="rounded-lg border px-4">
           <AccordionTrigger className="gap-2 text-sm font-semibold">
             <MapPin className="size-4 text-rose-500" /> Address
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-1 gap-4 pt-2 sm:grid-cols-2">
-            {(["country", "state", "district", "area", "pincode", "society", "house_number", "street_number", "landmark"] as const).map((field) => (
+            {(
+              [
+                "country",
+                "state",
+                "district",
+                "area",
+                "pincode",
+                "society",
+                "house_number",
+                "street_number",
+                "landmark",
+              ] as const
+            ).map((field) => (
               <form.AppField key={field} name={field}>
                 {(f) => (
                   <f.FormInputField
-                    label={field.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+                    label={field
+                      .replace(/_/g, " ")
+                      .replace(/\b\w/g, (c) => c.toUpperCase())}
                     value={f.state.value}
                     onChange={f.handleChange}
                     error={f.state.meta.errors[0]}
@@ -315,7 +331,6 @@ export default function UserEditForm({
           </AccordionContent>
         </AccordionItem>
 
-        {/* Role */}
         <AccordionItem value="role" className="rounded-lg border px-4">
           <AccordionTrigger className="gap-2 text-sm font-semibold">
             <Shield className="size-4 text-violet-500" /> Role & Access
@@ -327,8 +342,12 @@ export default function UserEditForm({
                   label="Role"
                   defaultValue={f.state.value ?? "user"}
                   options={[
-                    "user", "health_provider", "educator",
-                    "event_organiser", "item_provider", "quiz_maker",
+                    "user",
+                    "health_provider",
+                    "educator",
+                    "event_organiser",
+                    "item_provider",
+                    "quiz_maker",
                   ].map((v) => ({ name: v, value: v }))}
                   onChange={(v) => f.handleChange(v as never)}
                   error={f.state.meta.errors[0]}
@@ -341,7 +360,7 @@ export default function UserEditForm({
                   label="Is Active"
                   defaultValue={String(f.state.value)}
                   options={[
-                    { name: "Active",   value: "true"  },
+                    { name: "Active", value: "true" },
                     { name: "Inactive", value: "false" },
                   ]}
                   onChange={(v) => f.handleChange(v === "true")}
@@ -383,7 +402,10 @@ export default function UserEditForm({
                 <f.FormSelectField
                   label="Medical Insurance"
                   defaultValue={f.state.value ?? "No"}
-                  options={[{ name: "Yes", value: "Yes" }, { name: "No", value: "No" }]}
+                  options={[
+                    { name: "Yes", value: "Yes" },
+                    { name: "No", value: "No" },
+                  ]}
                   onChange={(v) => f.handleChange(v as never)}
                   error={f.state.meta.errors[0]}
                 />
@@ -434,17 +456,28 @@ export default function UserEditForm({
           </AccordionContent>
         </AccordionItem>
 
-        {/* Personal Habits */}
         <AccordionItem value="habits" className="rounded-lg border px-4">
           <AccordionTrigger className="gap-2 text-sm font-semibold">
             <Activity className="size-4 text-orange-500" /> Personal Habits
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-1 gap-4 pt-2 sm:grid-cols-2">
-            {(["habit_exercise", "food", "drinks", "intoxications", "hobbies", "likings", "disliking"] as const).map((field) => (
+            {(
+              [
+                "habit_exercise",
+                "food",
+                "drinks",
+                "intoxications",
+                "hobbies",
+                "likings",
+                "disliking",
+              ] as const
+            ).map((field) => (
               <form.AppField key={field} name={field}>
                 {(f) => (
                   <f.FormInputField
-                    label={field.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+                    label={field
+                      .replace(/_/g, " ")
+                      .replace(/\b\w/g, (c) => c.toUpperCase())}
                     value={f.state.value}
                     onChange={f.handleChange}
                     error={f.state.meta.errors[0]}
@@ -470,17 +503,22 @@ export default function UserEditForm({
             <Heart className="size-4 text-red-500" /> Health & Fitness Survey
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-1 gap-4 pt-2 sm:grid-cols-2">
-            {([
-              ["running",                        "Running"],
-              ["walking",                        "Walking"],
-              ["cycling",                        "Cycling"],
-              ["fitness_exercise",               "Exercise"],
-              ["competitive_sports_events",      "Competitive Sports Events"],
-              ["paid_events",                    "Paid Events"],
-              ["regular_health_management",      "Regular Health Management"],
-              ["donate_for_society_benefit",     "Donate for Society Benefit"],
-              ["invest_funds_in_company_shares", "Invest Funds in Company Shares"],
-            ] as const).map(([field, label]) => (
+            {(
+              [
+                ["running", "Running"],
+                ["walking", "Walking"],
+                ["cycling", "Cycling"],
+                ["fitness_exercise", "Exercise"],
+                ["competitive_sports_events", "Competitive Sports Events"],
+                ["paid_events", "Paid Events"],
+                ["regular_health_management", "Regular Health Management"],
+                ["donate_for_society_benefit", "Donate for Society Benefit"],
+                [
+                  "invest_funds_in_company_shares",
+                  "Invest Funds in Company Shares",
+                ],
+              ] as const
+            ).map(([field, label]) => (
               <form.AppField key={field} name={field}>
                 {(f) => (
                   <f.FormSelectField
@@ -511,61 +549,101 @@ export default function UserEditForm({
           <AccordionTrigger className="gap-2 text-sm font-semibold">
             <Stethoscope className="size-4 text-pink-500" /> Medical Conditions
           </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-1 gap-4 pt-2 sm:grid-cols-2">
-            {([
-              ["skin_disease",                   "Skin Disease"],
-              ["diabetes",                       "Diabetes"],
-              ["hypertension",                   "Hypertension"],
-              ["thyroidism",                     "Thyroidism"],
-              ["dyslipidemia",                   "Dyslipidemia"],
-              ["cancer",                         "Cancer"],
-              ["asthma",                         "Asthma"],
-              ["tuberculosis",                   "Tuberculosis"],
-              ["respiratory_infections",         "Respiratory Infections"],
-              ["stress_depression_anxiety",      "Stress / Depression / Anxiety"],
-              ["constipation_diarrhea",          "Constipation / Diarrhea"],
-              ["indigestion_acidity_flatulence", "Indigestion / Acidity / Flatulence"],
-              ["headache",                       "Headache"],
-              ["heart_related_problems",         "Heart Related Problems"],
-              ["kidney_related_problems",        "Kidney Related Problems"],
-              ["liver_related_problems",         "Liver Related Problems"],
-            ] as const).map(([field, label]) => (
-              <form.AppField key={field} name={field}>
-                {(f) => (
-                  <f.FormSelectField
-                    label={label}
-                    defaultValue={f.state.value ?? "no"}
-                    options={YES_NO_OPTIONS}
-                    onChange={(v) => f.handleChange(v as never)}
-                    error={f.state.meta.errors[0]}
-                  />
-                )}
-              </form.AppField>
-            ))}
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {(
+                [
+                  ["skin_disease", "Skin Disease"],
+                  ["diabetes", "Diabetes"],
+                  ["hypertension", "Hypertension"],
+                  ["thyroidism", "Thyroidism"],
+                  ["dyslipidemia", "Dyslipidemia"],
+                  ["cancer", "Cancer"],
+                  ["asthma", "Asthma"],
+                  ["tuberculosis", "Tuberculosis"],
+                  ["respiratory_infections", "Respiratory Infections"],
+                  [
+                    "stress_depression_anxiety",
+                    "Stress / Depression / Anxiety",
+                  ],
+                  ["constipation_diarrhea", "Constipation / Diarrhea"],
+                  [
+                    "indigestion_acidity_flatulence",
+                    "Indigestion / Acidity / Flatulence",
+                  ],
+                  ["headache", "Headache"],
+                  ["heart_related_problems", "Heart Related Problems"],
+                  ["kidney_related_problems", "Kidney Related Problems"],
+                  ["liver_related_problems", "Liver Related Problems"],
+                ] as const
+              ).map(([field, label]) => (
+                <form.AppField key={field} name={field}>
+                  {(f) => (
+                    <f.FormSelectField
+                      label={label}
+                      defaultValue={f.state.value ?? "no"}
+                      options={YES_NO_OPTIONS}
+                      onChange={(v) => f.handleChange(v as never)}
+                      error={f.state.meta.errors[0]}
+                    />
+                  )}
+                </form.AppField>
+              ))}
+            </div>
+
+            <div className="border-t pt-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Illness History
+              </p>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {(
+                  [
+                    ["medical_timelines.last_one_month", "Last 1 Month"],
+                    ["medical_timelines.last_three_month", "Last 3 Months"],
+                    ["medical_timelines.last_six_month", "Last 6 Months"],
+                    ["medical_timelines.last_twelve_month", "Last 12 Months"],
+                  ] as const
+                ).map(([field, label]) => (
+                  <form.AppField key={field} name={field}>
+                    {(f) => (
+                      <f.FormInputField
+                        label={label}
+                        placeholder="e.g. Fever, Cold..."
+                        value={f.state.value ?? ""}
+                        onChange={f.handleChange}
+                        error={f.state.meta.errors[0]}
+                      />
+                    )}
+                  </form.AppField>
+                ))}
+              </div>
+            </div>
           </AccordionContent>
         </AccordionItem>
 
-        {/* Bank Details */}
         <AccordionItem value="bank" className="rounded-lg border px-4">
           <AccordionTrigger className="gap-2 text-sm font-semibold">
             <CreditCard className="size-4 text-indigo-500" /> Bank Details
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-1 gap-4 pt-2 sm:grid-cols-2">
-            {(["bank_name", "account_number", "ifsc", "upi"] as const).map((field) => (
-              <form.AppField key={field} name={field}>
-                {(f) => (
-                  <f.FormInputField
-                    label={field.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
-                    value={f.state.value}
-                    onChange={f.handleChange}
-                    error={f.state.meta.errors[0]}
-                  />
-                )}
-              </form.AppField>
-            ))}
+            {(["bank_name", "account_number", "ifsc", "upi"] as const).map(
+              (field) => (
+                <form.AppField key={field} name={field}>
+                  {(f) => (
+                    <f.FormInputField
+                      label={field
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (c) => c.toUpperCase())}
+                      value={f.state.value}
+                      onChange={f.handleChange}
+                      error={f.state.meta.errors[0]}
+                    />
+                  )}
+                </form.AppField>
+              ),
+            )}
           </AccordionContent>
         </AccordionItem>
-
       </Accordion>
     </GenericFormContainer>
   );

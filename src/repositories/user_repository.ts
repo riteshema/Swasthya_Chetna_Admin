@@ -114,4 +114,21 @@ export default class UserRepository {
 
     return Ok(null);
   }
+
+  public async update_user(
+    args: InferZodType<typeof UserAdminSchema>,
+  ): Promise<Result<InferZodType<typeof UserAdminSchema>, string>> {
+    const { data, error } = await this.client.rpc("admin_update_user", {
+      p_data: args,
+    });
+
+    if (error) return Err(error.message);
+
+    const parsed = UserAdminSchema.safeParse(data);
+    if (!parsed.success) {
+      return Err(parsed.error.issues.map((e) => e.message).join(","));
+    }
+
+    return Ok(parsed.data);
+  }
 }

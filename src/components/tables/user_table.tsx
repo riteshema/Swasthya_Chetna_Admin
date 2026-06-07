@@ -106,11 +106,7 @@ export default function UserTable({ filters }: Props): JSX.Element {
     type: "finite-paginated",
     updator: async (vals) => {
       const tid = toast.loading("Updating user...");
-      const result = await user_repo.update_user_role({
-        user_id: vals.user_id,
-        role: vals.role ?? "user",
-        is_active: vals.role_is_active ?? false,
-      });
+      const result = await user_repo.update_user(vals);
       toast.dismiss(tid);
       if (result.is_err()) {
         toast.error(`Failed: ${result.error}`);

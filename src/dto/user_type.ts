@@ -1,15 +1,12 @@
 import { z } from "zod";
 
 const MedicalTimelineSchema = z.object({
-  timeline: z.enum([
-    "last_one_month",
-    "last_three_month",
-    "last_six_month",
-    "last_twelve_month",
-  ]),
-  has_illness: z.enum(["yes", "no"]),
-  details: z.string().nullable(),
+  last_one_month:    z.string().nullable(),
+  last_three_month:  z.string().nullable(),
+  last_six_month:    z.string().nullable(),
+  last_twelve_month: z.string().nullable(),
 });
+
 
 const YesNoSchema = z.enum(["yes", "no"]);
 const YesNoNullSchema = YesNoSchema.nullable();
@@ -101,7 +98,7 @@ export const UserAdminSchema = z.object({
   kidney_related_problems:        YesNoNullSchema,
   liver_related_problems:         YesNoNullSchema,
 
-  medical_timelines: z.array(MedicalTimelineSchema).default([]),
+  medical_timelines: MedicalTimelineSchema.nullable(),
 
   bank_name:      z.string().nullable(),
   account_number: z.string().nullable(),
