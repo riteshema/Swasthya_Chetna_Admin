@@ -87,9 +87,9 @@ export default function UserEditForm({
         disliking: r?.disliking ?? "",
         life_goal: r?.life_goal ?? "",
 
-        running: r?.running ?? "no",
-        walking: r?.walking ?? "no",
-        cycling: r?.cycling ?? "no",
+        running: r?.running ?? "",
+        walking: r?.walking ?? "",
+        cycling: r?.cycling ?? "",
         fitness_exercise: r?.fitness_exercise ?? "no",
         competitive_sports_events: r?.competitive_sports_events ?? "no",
         paid_events: r?.paid_events ?? "no",
