@@ -170,14 +170,14 @@ function SelectFilter({
   options,
   onChange,
 }: Readonly<{
-  selected: string | undefined;
+  selected: string | null | undefined;
   options: Array<{ name: string; value: string }>;
   onChange: (value: string | undefined) => void;
 }>): JSX.Element {
   return (
-    <Select
-      value={selected}
-      onValueChange={(option) => onChange(option ?? undefined)}
+     <Select
+      value={selected || ""}
+      onValueChange={(option) => onChange(option || undefined)}  
     >
       <div
         className={cn(
