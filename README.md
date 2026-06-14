@@ -1,9 +1,9 @@
 ## Getting Started
 First, run the development server:
 
-``cd swasthya_chetna_admin`bash
+```bash
 git clone "repo_url"
-
+cd swasthya_chetna_admin
 pnpm i
 pnpm dev
 ```
