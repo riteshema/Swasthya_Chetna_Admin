@@ -164,7 +164,6 @@ function DateFilter({
     </Popover>
   );
 }
-
 function SelectFilter({
   selected,
   options,
@@ -175,9 +174,9 @@ function SelectFilter({
   onChange: (value: string | undefined) => void;
 }>): JSX.Element {
   return (
-     <Select
+    <Select
       value={selected || ""}
-      onValueChange={(option) => onChange(option || undefined)}  
+      onValueChange={(option) => onChange(option || undefined)}
     >
       <div
         className={cn(
@@ -188,16 +187,6 @@ function SelectFilter({
         <SelectTrigger
           className={selected !== undefined ? `border-none bg-transparent` : ""}
         />
-        <Button
-          hidden={selected === undefined}
-          variant={"destructive"}
-          size={"icon-xs"}
-          onClick={() => {
-            onChange(undefined);
-          }}
-        >
-          <XIcon />
-        </Button>
       </div>
       <SelectContent>
         {options.map(({ name, value }) => (

@@ -61,12 +61,12 @@ export default class PaymentRepository {
     return Ok(parsed.data);
   }
 
-  public async delete_payment(id: number): Promise<Result<null, string>> {
+  public async delete_payment(id: number): Promise<Result<void, string>> {
     const { error } = await this.client.rpc("delete_payment_proof", {
       p_data: { id },
     });
 
     if (error) return Err(error.message);
-    return Ok(null);
+    return Ok(undefined);
   }
 }

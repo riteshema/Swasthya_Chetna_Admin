@@ -26,6 +26,7 @@ import TableSkeleton from "./commons/table_skeleton";
 import ErrorState from "./commons/table_error_state";
 import PaymentEditForm from "@components/forms/payment_form";
 import { string } from "zod";
+import { type DeepPartial } from "@type/deep_partial";
 
 const PaymentFilterSchema = PaymentSchema.omit({
   approve: true,
@@ -75,41 +76,52 @@ export default function PaymentTable({ filters }: Props): JSX.Element {
     queryKey: query_key,
     queryFn: async () => {
       const rawFilters = parser.from_column_filters_state(column_filters).unwrap();
-      const raw = rawFilters as Record<string, unknown>;
+      const fil: InferZodType<DeepPartial<typeof PaymentSchema>> = {};
 
-      const fil: Record<string, unknown> = { ...raw };
+      // full_name: read directly from column_filters (parser may drop it)
+      const full_name_raw = column_filters.find((f) => f.id === "full_name")?.value;
+      if (typeof full_name_raw === "string" && full_name_raw.trim() !== "") {
+        fil.full_name = full_name_raw.trim();
+      }
+
+      // transaction_id
+      if (typeof rawFilters.transaction_id === "string") {
+        fil.transaction_id = rawFilters.transaction_id;
+      }
+
+      // payment_reason
+      if (typeof rawFilters.payment_reason === "string") {
+        fil.payment_reason = rawFilters.payment_reason;
+      }
+
+      // payment_method: "all" means no filter
+      if (
+        typeof rawFilters.payment_method === "string" &&
+        rawFilters.payment_method !== "all"
+      ) {
+        fil.payment_method = rawFilters.payment_method;
+      }
 
       // approve: string → boolean
-      if (raw.approve === "true") {
+      if (rawFilters.approve === "true") {
         fil.approve = true;
-      } else if (raw.approve === "false") {
+      } else if (rawFilters.approve === "false") {
         fil.approve = false;
-      } else {
-        delete fil.approve;
       }
 
       // payment_amount: string → number
-      const amount_raw = raw.payment_amount as string | undefined;
-      if (amount_raw && amount_raw.trim() !== "") {
-        fil.payment_amount = parseFloat(amount_raw);
-      } else {
-        delete fil.payment_amount;
-      }
-
-      // payment_method: "all" → delete
-      if (fil.payment_method === "all") {
-        delete fil.payment_method;
+      if (
+        typeof rawFilters.payment_amount === "string" &&
+        rawFilters.payment_amount.trim() !== ""
+      ) {
+        fil.payment_amount = parseFloat(rawFilters.payment_amount);
       }
 
       const query_str =
         column_filters.length === 0
           ? ""
           : "&".concat(
-              parser
-                .to_query(
-                  parser.from_column_filters_state(column_filters).unwrap(),
-                )
-                .unwrap(),
+              parser.to_query(rawFilters).unwrap(),
             );
 
       window.history.pushState(
@@ -121,7 +133,7 @@ export default function PaymentTable({ filters }: Props): JSX.Element {
       const result = await payment_repo.get_all_payments({
         page_limit: pagination.pageSize,
         current_page: pagination.pageIndex,
-        filters: fil as never,
+        filters: fil,
       });
 
       if (result.is_err()) throw new Error(result.error);
@@ -134,7 +146,10 @@ export default function PaymentTable({ filters }: Props): JSX.Element {
     type: "finite-paginated",
     updator: async (vals) => {
       const tid = toast.loading("Updating payment...");
-      const result = await payment_repo.update_payment(vals);
+      const result = await payment_repo.update_payment({
+        ...vals,
+        full_name: vals.full_name ?? "",
+      });
       toast.dismiss(tid);
       if (result.is_err()) {
         toast.error(`Failed: ${result.error}`);

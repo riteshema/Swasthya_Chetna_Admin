@@ -29,6 +29,7 @@ export default function PaymentEditForm({
         payment_reason: r?.payment_reason ?? "",
         approve: r?.approve ?? false,
         created_at: r?.created_at ?? "",
+        full_name: r?.full_name ?? "",
       };
     }, [rowAction]),
 
@@ -53,7 +54,6 @@ export default function PaymentEditForm({
       {...props}
     >
       <div className="space-y-4">
-
         <div className="rounded-lg border px-4 py-3 space-y-4">
           <p className="flex items-center gap-2 text-sm font-semibold">
             <Info className="size-4 text-blue-500" /> Payment Details
@@ -132,7 +132,6 @@ export default function PaymentEditForm({
             )}
           </form.AppField>
         </div>
-
       </div>
     </GenericFormContainer>
   );
