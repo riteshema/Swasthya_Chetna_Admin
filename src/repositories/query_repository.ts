@@ -59,4 +59,14 @@ export class QueryRepository {
     if (error) return Err(error.message);
     return Ok(null);
   }
+
+  public async delete_query(id: number): Promise<Result<null, string>> {
+    const { error } = await this.client
+      .from("course_query")
+      .delete()
+      .eq("id", id);
+
+    if (error) return Err(error.message);
+    return Ok(null);
+  }
 }
