@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type JSX } from "react";
+import { useMemo, useState, type JSX } from "react";
 import {
   getCoreRowModel,
   type ColumnDef,
@@ -8,11 +8,11 @@ import {
   type PaginationState,
 } from "@tanstack/react-table";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { QuerySchema } from "@dto/query_type";
-import { QueryClientRepository } from "@repositories/query_repository.client";
-// import { QueryRepository } from "@repositories/index";
+import { QueryRepository } from "@repositories/query_repository";
 
 import { Edit } from "lucide-react";
 import { Button } from "@components/ui/button";
@@ -31,26 +31,26 @@ import ErrorState from "./commons/table_error_state";
 
 import QueryForm from "@components/forms/query_form";
 import { CRC32 } from "@lib/crc32";
-import z from "zod"; // ✅ FIXED: was `import { string } from "zod"`
+import z from "zod";
 
 interface Props {
   filters: FiltersWithPage<typeof QuerySchema> | null;
 }
 
-// const query_repo = QueryRepository.for_client();
-const query_repo = QueryClientRepository.for_client();
+const query_repo = QueryRepository.for_client();
 
-/* ---------------- FILTER PARSER ---------------- */
 const parser = new FilterParser(
   build_deep_partial_schema(
     QuerySchema.omit({ email: true }).extend({
-      email: z.string(), // ✅ FIXED: was `string()`
+      email: z.string(),
     }),
   ),
   { array_encoding: "comma" },
 );
 
 export default function QueryTable({ filters }: Props): JSX.Element {
+  const query_client = useQueryClient();
+
   const [row_action, set_row_action] =
     useState<RowAction<InferZodType<typeof QuerySchema>> | null>(null);
 
@@ -71,7 +71,6 @@ export default function QueryTable({ filters }: Props): JSX.Element {
     [pagination.pageIndex, column_filters],
   );
 
-  /* ---------------- FETCH DATA ---------------- */
   const { data, isLoading, isError, error } = useQuery({
     queryKey: query_key,
     queryFn: async () => {
@@ -88,115 +87,86 @@ export default function QueryTable({ filters }: Props): JSX.Element {
     },
   });
 
-  /* ---------------- URL SYNC ---------------- */
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const fil = parser.from_column_filters_state(column_filters).unwrap();
-
-    const query_str =
-      column_filters.length === 0
-        ? ""
-        : "&" + parser.to_query(fil).unwrap();
-
-    window.history.pushState(
-      null,
-      "",
-      `?page=${pagination.pageIndex + 1}&limit=${pagination.pageSize}${query_str}`,
-    );
-  }, [pagination, column_filters]);
-
-  /* ---------------- TABLE COLUMNS ---------------- */
-
   const columns = useMemo<ColumnDef<InferZodType<typeof QuerySchema>>[]>(
-  () => [
-    {
-      id: "full_name",
-      accessorKey: "full_name",
-      header: "Name",
-      meta: {
-        filter: { type: "text" },
+    () => [
+      {
+        id: "full_name",
+        accessorKey: "full_name",
+        header: "Name",
+        meta: { filter: { type: "text" } },
+        cell: ({ row }) => (
+          <span className="font-medium">
+            {row.original.full_name || "—"}
+          </span>
+        ),
       },
-      cell: ({ row }) => (
-        <span className="font-medium">
-          {row.original.full_name || "—"}
-        </span>
-      ),
-    },
-    {
-      id: "email",
-      accessorKey: "email",
-      header: "Email",
-      meta: {
-        filter: { type: "text" },
+      {
+        id: "email",
+        accessorKey: "email",
+        header: "Email",
+        meta: { filter: { type: "text" } },
       },
-    },
-    {
-      id: "whatsapp_number",
-      accessorKey: "whatsapp_number",
-      header: "WhatsApp",
-      meta: {
-        filter: { type: "text" },
+      {
+        id: "whatsapp_number",
+        accessorKey: "whatsapp_number",
+        header: "WhatsApp",
+        meta: { filter: { type: "text" } },
       },
-    },
-    {
-      id: "status",
-      accessorKey: "status",
-      header: "Status",
-      meta: {
-        filter: {
-          type: "select",
-          options: [
-            { name: "Pending", value: "pending" },
-            { name: "In Progress", value: "in_progress" },
-            { name: "Resolved", value: "resolved" },
-            { name: "Rejected", value: "rejected" },
-          ],
+      {
+        id: "status",
+        accessorKey: "status",
+        header: "Status",
+        meta: {
+          filter: {
+            type: "select",
+            options: [
+              { name: "Pending", value: "pending" },
+              { name: "In Progress", value: "in_progress" },
+              { name: "Resolved", value: "resolved" },
+              { name: "Rejected", value: "rejected" },
+            ],
+          },
         },
+        cell: ({ row }) => (
+          <span className="text-xs px-2 py-1 rounded bg-blue-50 text-blue-700">
+            {row.original.status ?? "pending"}
+          </span>
+        ),
       },
-      cell: ({ row }) => (
-        <span className="text-xs px-2 py-1 rounded bg-blue-50 text-blue-700">
-          {row.original.status ?? "pending"}
-        </span>
-      ),
-    },
-    {
-      id: "created_at",
-      accessorKey: "created_at",
-      header: "Created At",
-      meta: {
-        filter: { type: "date" },
+      {
+        id: "created_at",
+        accessorKey: "created_at",
+        header: "Created At",
+        meta: { filter: { type: "date" } },
+        cell: ({ row }) =>
+          row.original.created_at
+            ? new Date(row.original.created_at).toLocaleString()
+            : "—",
       },
-      cell: ({ row }) =>
-        row.original.created_at
-          ? new Date(row.original.created_at).toLocaleString()
-          : "—",
-    },
-    {
-      id: "action",
-      header: "Action",
-      cell: ({ row }) => (
-        <div className="flex justify-end">
-          <Button
-            variant="ghost"
-            onClick={() =>
-              set_row_action({
-                action: "update",
-                index: row.index,
-                row: row.original,
-              })
-            }
-          >
-            <Edit className="size-4" />
-          </Button>
-        </div>
-      ),
-    },
-  ],
-  [],
-);
+      {
+        id: "action",
+        header: "Action",
+        cell: ({ row }) => (
+          <div className="flex justify-end">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                set_row_action({
+                  action: "update",
+                  index: row.index,
+                  row: row.original,
+                })
+              }
+            >
+              <Edit className="size-4" />
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [],
+  );
 
-  /* ---------------- TABLE ---------------- */
   const table = useExtendedReactTable<InferZodType<typeof QuerySchema>>({
     data: data?.payload ?? [],
     columns,
@@ -231,7 +201,21 @@ export default function QueryTable({ filters }: Props): JSX.Element {
           if (!open) set_row_action(null);
         }}
         rowAction={row_action}
-        onSubmit={() => {
+        onSubmit={async (action) => {
+          if (action.action === "update") {
+            const result = await query_repo.update_query(
+              action.row.id,
+              action.row,
+            );
+
+            if (result.is_err()) {
+              toast.error(result.error);
+              return;
+            }
+
+            toast.success("Query updated successfully");
+            await query_client.invalidateQueries({ queryKey: ["queries"] });
+          }
           set_row_action(null);
         }}
       />
