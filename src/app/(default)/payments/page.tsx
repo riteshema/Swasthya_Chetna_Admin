@@ -3,14 +3,18 @@ import { build_deep_partial_schema } from "@lib/build_partial_schema";
 import { FilterParser } from "@lib/filter";
 import { PaymentSchema } from "@dto/payment_type";
 import { type JSX } from "react";
-import z, { string } from "zod";
+import z from "zod";
 
 interface PaymentProps {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const PaymentFilterSchema = PaymentSchema.omit({ approve: true }).extend({
-  approve: string().optional(),
+const PaymentFilterSchema = PaymentSchema.omit({
+  approve: true,
+  payment_amount: true,
+}).extend({
+  approve: z.string().optional(),
+  payment_amount: z.string().optional(),
 });
 
 export default async function PaymentPage({
@@ -20,14 +24,13 @@ export default async function PaymentPage({
 
   const parser = new FilterParser(
     build_deep_partial_schema(PaymentFilterSchema).extend({
-      page:  z.coerce.number().positive().optional().default(1),
+      page: z.coerce.number().positive().optional().default(1),
       limit: z.coerce.number().positive().optional().default(10),
     }),
     { array_encoding: "comma" },
   );
 
   const t = parser.parse_json(params);
-
   return (
     <div className="p-6 space-y-4">
       <div>
