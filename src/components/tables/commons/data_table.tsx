@@ -176,7 +176,7 @@ function SelectFilter({
 }>): JSX.Element {
   return (
     <Select
-      value={selected}
+     value={selected ?? ""}
       onValueChange={(option) => onChange(option ?? undefined)}
     >
       <div
